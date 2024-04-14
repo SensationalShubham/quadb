@@ -129,3 +129,129 @@ fn main() {
     None => println!("Invalid k value"),
   }
 }
+
+8.
+use std::option::Option;
+
+struct TreeNode {
+  val: i32,
+  left: Option<Box<TreeNode>>,
+  right: Option<Box<TreeNode>>,
+}
+
+impl TreeNode {
+  #[allow(dead_code)]
+  fn new(val: i32) -> Self {
+    TreeNode {
+      val,
+      left: None,
+      right: None,
+    }
+  }
+}
+
+fn max_depth(root: Option<&TreeNode>) -> i32 {
+  match root {
+    None => 0,
+    Some(node) => {
+      let left_depth = max_depth(node.left.as_ref());
+      let right_depth = max_depth(node.right.as_ref());
+      std::cmp::max(left_depth, right_depth) + 1
+    }
+  }
+}
+
+fn main() {
+  let mut root = TreeNode::new(3);
+  root.left = Some(Box::new(TreeNode::new(9)));
+  root.right = Some(Box::new(TreeNode::new(20)));
+  root.right.right = Some(Box::new(TreeNode::new(7)));
+
+  let depth = max_depth(Some(&root));
+  println!("Maximum depth of the tree: {}", depth);
+}
+
+9.
+fn reverse_string(text: &str) -> String {
+  text.chars().rev().collect()
+}
+
+fn main() {
+  let text = "hello world";
+  let reversed_text = reverse_string(text);
+  println!("Original text: {}", text);
+  println!("Reversed text: {}", reversed_text);
+}
+
+10.
+fn is_prime(num: u32) -> bool {
+  if num <= 1 {
+    return false;
+  }
+
+  for i in 2..(num as f64).sqrt().ceil() as u32 {
+    if num % i == 0 {
+      return false;
+    }
+  }
+  true
+}
+
+fn main() {
+  let numbers = [13, 25, 31];
+
+  for num in numbers.iter() {
+    println!("{} is prime: {}", num, is_prime(*num));
+  }
+}
+
+11.
+fn merge_sorted_arrays(arr1: &[i32], arr2: &[i32]) -> Vec<i32> {
+  let mut merged_vec = Vec::with_capacity(arr1.len() + arr2.len());
+
+  let mut i = 0;
+  let mut j = 0;
+
+  while i < arr1.len() && j < arr2.len() {
+    if arr1[i] < arr2[j] {
+      merged_vec.push(arr1[i]);
+      i += 1;
+    } else {
+      merged_vec.push(arr2[j]);
+      j += 1;
+    }
+  }
+
+  merged_vec.extend_from_slice(&arr1[i..]);
+  merged_vec.extend_from_slice(&arr2[j..]);
+
+  merged_vec
+}
+
+fn main() {
+  let arr1 = vec![1, 3, 5];
+  let arr2 = vec![2, 4, 6];
+  let merged_array = merge_sorted_arrays(&arr1, &arr2);
+
+  println!("Merged array: {:?}", merged_array);
+}
+
+12.
+fn max_subarray_sum(arr: &[i32]) -> i32 {
+  let mut current_sum = i32::MIN; // Initialize with minimum possible value
+  let mut max_sum = i32::MIN;
+
+  for num in arr.iter() {
+    current_sum = std::cmp::max(*num, current_sum + *num); // Update current sum
+    max_sum = std::cmp::max(max_sum, current_sum); // Update max sum
+  }
+
+  max_sum
+}
+
+fn main() {
+  let numbers = vec![1, -2, 3, 4, -1, 2, 1, 5, -3];
+  let max_subarray_value = max_subarray_sum(&numbers);
+
+  println!("Maximum subarray sum: {}", max_subarray_value);
+}
